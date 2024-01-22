@@ -4,10 +4,10 @@ import { Button, TextField, Grid } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { submitForm } from '../../actions';
+import { submitForm,FormSubmission } from '../../actions';
 import { RootState } from '../../reducers';
 
-// Define the structure of your form data
+
 interface Form {
   address: string;
   state: string;
@@ -29,14 +29,11 @@ const Address: React.FC<AddressProps> = ({ formData, setFormData, setStepper }) 
   const dispatch = useDispatch();
   const formSubmissions = useSelector((state: RootState) => state);
 
-  console.log(formSubmissions);
-
   const [countryData, setCountryData] = useState<string[]>([]);
   const getCountries = () => {
     axios
       .get(`https://restcountries.com/v3.1/all`)
       .then((res) => {
-        console.log(res.data);
         const pushData: string[] = [];
         for (let i = 0; i < res.data.length; i++) {
           const element = res.data[i];
@@ -45,7 +42,6 @@ const Address: React.FC<AddressProps> = ({ formData, setFormData, setStepper }) 
         setCountryData(pushData);
       })
       .catch((error) => {
-        console.log(error);
         setCountryData([]);
       });
   };
@@ -62,8 +58,21 @@ const Address: React.FC<AddressProps> = ({ formData, setFormData, setStepper }) 
 
 
   const onSubmit = (data: Form) => {
-    const submitData = { ...formData, ...data, selectedCountry };
-    dispatch(submitForm(submitData));
+    // const submitData = { ...formData, ...data, selectedCountry };
+    const formSubmitData:FormSubmission = {
+      firstName: formData.firstName,
+      age: formData.age,
+      gender: formData.gender,
+      mobile: formData.mobile,
+      govt: formData.govt,
+      issueId: formData.issueId,
+      address: data.address === undefined ? '' : data.address,
+      state: data.state === undefined ? '' : data.state,
+      city: data.city === undefined ? '' : data.city,
+      selectedCountry: selectedCountry === undefined ? '' : selectedCountry,
+      pincode: data.pincode === undefined ? 0 : data.pincode
+    }
+    dispatch(submitForm(formSubmitData));
     setStepper(1);
   }
 

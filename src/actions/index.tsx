@@ -1,6 +1,6 @@
 export const SUBMIT_FORM = 'SUBMIT_FORM';
 
-interface FormSubmission {
+export interface FormSubmission {
   firstName: string;
   age: number;
   gender: string;
@@ -10,7 +10,7 @@ interface FormSubmission {
   address: string;
   state: string;
   city: string;
-  selectedCountry: string;
+  selectedCountry: string | null;
   pincode: number;
 }
 
